@@ -5,24 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div>
+    <div class="container">
         <h1>
             To Do List
-            You currently have {{ l|length }} things to do.
+            <br><br>
+            {% if l|length == 1 %}
+            You currently have {{ l|length }} thing to do
+            {% elif l|length > 0 %}
+            You currently have {{ l|length }} things to do
+            {% else %}
+            You dont have to do anything
+            {% endif %}
         </h1>
+
         {% from "_formhelper.html" import render_field %}
         <form method=post>
-            <dl>
-                {{ render_field(form.activity_name) }}
-            </dl>
+            {{ render_field(form.activity_name) }}
             <input type=submit value=Register>
         </form>
-        <ul>
+
+        <ul id="activity-list">
             {% for item in l %}
-                <li>{{ item[1].name }}   {{ item[1].time }}</li>
-                <a class="button" href="{{ url_for('delete_activity', id=item[0] ) }}">Delete</a>
+                    <li id="activity">
+                        <p>{{ item[1].name }} <br> {{ item[1].time }}</p>
+                        <button>
+                            <a href="{{ url_for('delete_activity', id=item[0] ) }}">Delete</a>
+                        </button>
+                    </li>
             {% endfor %}
         </ul>
     </div>
